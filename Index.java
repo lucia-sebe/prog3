@@ -5,27 +5,28 @@ public class Index {
 
     public static void main(String args[]) {
         Scanner sc = new Scanner(System.in);
-        String nombre = " ", nombreConsulta = "";
-        int numero = 0;
+        // Borro estas variables xq la idea es que se definan cerca de donde se van a usar
         boolean valorCorrecto = true;
 
-        static ArrayList<Contacto> agenda = new ArrayList<>();
+        // static? hmmm
+        ArrayList<Contacto> agenda = new ArrayList<>();
+
+        // esta es la pieza clave que te falto, el while que repita para ingresar el comando.
+        while (true) {
 
         System.out.println("¿Quieres [I]ngresar un nuevo contacto o [C]onsultar un contacto existente?");
-        char opcion = sc.next().charAt(0);
+        char opcion = sc.nextLine().charAt(0);
 
         switch (opcion) {
+            // un truquito que vi que hacia Facu y funciona...
             case 'I':
+            case 'i':
+                // Propongo esto...
+                String nombre;
                 do {
-                    if (valorCorrecto == false) {
-                        System.out.println("Debe tener mas de dos caracteres: ");
-                        nombre = sc.next();
-                    } else {
-                        System.out.println("Ingresa el nombre: ");
-                        nombre = sc.next();
-                        valorCorrecto = false;
-                    }
-                } while (nombre.length() <= 2);
+                    System.out.println("Ingresa el nombre del contacto: ");
+                    nombre = sc.nextLine();
+                } while (nombre.isEmpty());
 
                 do {
                     if (valorCorrecto == true) {
@@ -36,28 +37,39 @@ public class Index {
                         numero = sc.nextInt();
                         valorCorrecto = true;
                     }
-                } while (numero <= 9999999);
+                } while (numero <= 9999999); // ?? Usaria un string para el numero "09812345" o "+598 (532) 123-567"
 
-           //ingresar mail
+                //ingresar mail
+                // el mail podrias no hacer ninguna validacion xq igual es opcional...
+
+                // Ahora como lo agregarias a la lista? eso queda para vos :)
         
                 break;
 
             case 'C':
+            case 'c':
+            // Aca hay que ingresar el nombre
+                String nombre;
                 do {
-                    if (valorCorrecto == false) {
-                        System.out.println("¡No existe un contacto con ese nombre!");
-
-                    } else {
-                        System.out.println("Ingresa el nombre del contacto que quieres consultar: ");
-                        nombreConsulta = sc.next();
-                        valorCorrecto = false;
+                    System.out.println("Ingresa el nombre del contacto: ");
+                    nombre = sc.nextLine();
+                } while (nombre.isEmpty());
+                
+                // Despues buscarlo. Se te ocurre algo?
+                for (int i = 0; i < agenda.size(); i++) {
+                    if (agenda.get(i).getNombre().equals(nombre)) {
+                        agenda.get(i).presentYourself();
+                        break;
                     }
-                } while (nombreConsulta==nombre);
+                }
+                
 
                 break;
             default:
                 break;
         }
+
+      }
     }
 
     class Contacto{ 
@@ -65,6 +77,7 @@ public class Index {
         int numero;
         String mail;
 
+        // Lindo constructor :)
         public Contacto(String nombre, int numero, String mail) {
             this.nombre = nombre;
             this.numero = numero;
@@ -88,6 +101,10 @@ public class Index {
         }
         public void setMail(String mail) {
             this.mail = mail;
+        }
+
+        public void presentYourself () {
+            System.out.println("Nombre: " + nombre + " Numero: " + numero + " Mail: " + mail);
         }
     
     }
